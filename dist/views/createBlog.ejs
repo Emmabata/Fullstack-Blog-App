@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Create Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;500;400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2d4de0;
+      --secondary: #f6c44b;
+      --bg: linear-gradient(135deg, #f0f6ff 0%, #e5e5fa 100%);
+      --card-bg: #fff;
+      --error: #e53a3a;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Montserrat', Arial, sans-serif;
+      background: var(--bg);
+      color: #23243a;
+      min-height: 100vh;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: var(--primary);
+      color: #fff;
+      padding: 1.1rem 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+      font-weight: 500;
+      flex-wrap: wrap;
+    }
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      margin: 0 1.2rem;
+      padding: 0.3rem 0.9rem;
+      border-radius: 30px;
+      transition: background 0.2s;
+      font-size: 1.08rem;
+    }
+    nav a:hover {
+      background: var(--secondary);
+      color: var(--primary);
+    }
+    .container {
+      max-width: 540px;
+      margin: 2.5rem auto 1.5rem auto;
+      padding: 0 1.3rem;
+    }
+    .card {
+      background: var(--card-bg);
+      border-radius: 18px;
+      box-shadow: 0 6px 24px rgba(44,77,224,0.09);
+      padding: 2.2rem 2.9rem 1.5rem 1.8rem;
+      margin-bottom: 1.5rem;
+      animation: fadein 1s;
+    }
+    @keyframes fadein {
+      from { opacity: 0; transform: translateY(30px);}
+      to   { opacity: 1; transform: translateY(0);}
+    }
+    h1 {
+      color: var(--primary);
+      margin-bottom: 1.3rem;
+      font-size: 1.7rem;
+      font-weight: 700;
+      letter-spacing: -1px;
+      text-align: center;
+    }
+    label {
+      font-weight: 500;
+      color: #233;
+      margin-top: 0.6rem;
+      display: block;
+    }
+    input[type="text"], textarea {
+      width: 100%;
+      font-family: inherit;
+      font-size: 1.04rem;
+      margin-top: 0.2rem;
+      padding: 0.74rem;
+      border: 1.4px solid #c4d6f2;
+      border-radius: 9px;
+      background: #f8fafd;
+      margin-bottom: 1.1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input[type="text"]:focus, textarea:focus {
+      border-color: var(--primary);
+      background: #f3f8ff;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 110px;
+    }
+    .error {
+      color: var(--error);
+      margin-bottom: 1rem;
+      font-size: 1.06rem;
+      text-align: center;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 20px;
+      padding: 0.8rem 2.1rem;
+      font-size: 1.08rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 0.4rem;
+      box-shadow: 0 3px 12px rgba(44,77,224,0.09);
+      transition: background 0.15s, color 0.15s;
+      letter-spacing: 0.5px;
+    }
+    .btn-primary:hover {
+      background: var(--secondary);
+      color: var(--primary);
+    }
+    .back-link {
+      display: block;
+      margin-top: 1.5rem;
+      text-align: center;
+      color: var(--primary);
+      font-weight: 500;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .back-link:hover {
+      color: var(--secondary);
+    }
+    @media (max-width: 600px) {
+      .container { padding: 0 0.3rem; }
+      .card { padding: 1.2rem 0.5rem; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/blogs/home">Blogs</a>
+    <% if (session && session.userId) { %>
+      <a href="/blogs/create">Create Blog</a>
+      <a href="/blogs/drafts">My Drafts</a>
+      <a href="/logout">Logout</a>
+    <% } else { %>
+      <a href="/login">Login</a>
+      <a href="/signup">Sign Up</a>
+    <% } %>
+  </nav>
+  <div class="container">
+    <div class="card">
+      <h1>Create New Blog</h1>
+      <% if (error) { %>
+        <div class="error"><%= error %></div>
+      <% } %>
+      <form action="/blogs/create" method="POST">
+        <label>Title:
+          <input type="text" name="title" required>
+        </label>
+        <label>Description:
+          <input type="text" name="description">
+        </label>
+        <label>Tags (comma separated):
+          <input type="text" name="tags">
+        </label>
+        <label>Body:
+          <textarea name="body" rows="8" required></textarea>
+        </label>
+        <button class="btn-primary" type="submit">Create Blog</button>
+      </form>
+    </div>
+    <a href="/blogs/home" class="back-link">← Back to Blogs</a>
+  </div>
+</body>
+</html>

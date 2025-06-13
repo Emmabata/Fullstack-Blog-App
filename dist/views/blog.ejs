@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title><%= blog.title %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Google Fonts for style -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;500;400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2d4de0;
+      --secondary: #f6c44b;
+      --bg: linear-gradient(135deg, #e9f0fa 0%, #d7e8f7 100%);
+      --card-bg: #fff;
+      --text: #222;
+      --muted: #666;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Montserrat', Arial, sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
+      color: var(--text);
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: var(--primary);
+      color: #fff;
+      padding: 1.2rem 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+      font-weight: 500;
+      flex-wrap: wrap;
+    }
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      margin: 0 1.3rem;
+      padding: 0.2rem 0.7rem;
+      border-radius: 30px;
+      transition: background 0.2s;
+      font-size: 1.07rem;
+    }
+    nav a:hover, nav a.active {
+      background: var(--secondary);
+      color: var(--primary);
+    }
+    .container {
+      max-width: 700px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+    .blog-card {
+      background: var(--card-bg);
+      border-radius: 18px;
+      box-shadow: 0 6px 24px rgba(44,77,224,0.08);
+      padding: 2.5rem 2rem;
+      margin: 2.2rem 0;
+      transition: box-shadow 0.2s;
+      animation: fadein 1s;
+    }
+    @keyframes fadein {
+      from { opacity: 0; transform: translateY(30px);}
+      to   { opacity: 1; transform: translateY(0);}
+    }
+    h1 {
+      color: var(--primary);
+      margin-bottom: 0.8rem;
+      font-size: 2.15rem;
+      letter-spacing: -1px;
+      font-weight: 700;
+    }
+    .meta {
+      font-size: 1.03rem;
+      color: var(--muted);
+      margin-bottom: 0.6rem;
+    }
+    .meta strong {
+      color: var(--primary);
+    }
+    .blog-body {
+      font-size: 1.15rem;
+      color: var(--text);
+      line-height: 1.7;
+      margin: 1.5rem 0 1.8rem;
+      word-break: break-word;
+    }
+    .back-link {
+      display: inline-block;
+      background: var(--primary);
+      color: #fff;
+      padding: 0.6rem 1.3rem;
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: background 0.2s, color 0.2s;
+      box-shadow: 0 2px 8px rgba(44,77,224,0.09);
+    }
+    .back-link:hover {
+      background: var(--secondary);
+      color: var(--primary);
+    }
+    @media (max-width: 600px) {
+      .container { padding: 0 0.6rem; }
+      .blog-card { padding: 1.2rem 0.7rem; }
+      h1 { font-size: 1.3rem; }
+      nav { font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/blogs/home" class="active">Blogs</a>
+    <% if (session && session.userId) { %>
+      <a href="/blogs/create">Create Blog</a>
+      <a href="/blogs/drafts">My Drafts</a>
+      <a href="/logout">Logout</a>
+    <% } else { %>
+      <a href="/login">Login</a>
+      <a href="/signup">Sign Up</a>
+    <% } %>
+  </nav>
+  <div class="container">
+    <div class="blog-card">
+      <h1><%= blog.title %></h1>
+      <div class="meta">
+        <strong>By:</strong> <%= blog.author.first_name %> <%= blog.author.last_name %>
+        &nbsp; | &nbsp;
+        <strong>Reads:</strong> <%= blog.read_count %>
+        &nbsp; | &nbsp;
+        <strong>Reading time:</strong> <%= blog.reading_time %>
+      </div>
+      <div class="blog-body">
+        <%- blog.body.replace(/\n/g, '<br>') %>
+      </div>
+      <a href="/blogs/home" class="back-link">← Back to Blogs</a>
+    </div>
+  </div>
+</body>
+</html>
