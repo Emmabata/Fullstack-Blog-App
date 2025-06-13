@@ -10,10 +10,10 @@
     :root {
       --primary: #2d4de0;
       --secondary: #f6c44b;
-      --bg: linear-gradient(135deg, #e9f0fa 0%, #d7e8f7 100%);
+      --bg: linear-gradient(135deg, #f0f6ff 0%, #e5e5fa 100%);
       --card-bg: #fff;
-      --text: #222;
-      --muted: #666;
+      --text: #23243a;
+      --muted: #6d6b7b;
     }
     html, body {
       margin: 0;
@@ -29,19 +29,19 @@
       align-items: center;
       background: var(--primary);
       color: #fff;
-      padding: 1.2rem 0;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+      padding: 1.1rem 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
       font-weight: 500;
       flex-wrap: wrap;
     }
     nav a {
       color: #fff;
       text-decoration: none;
-      margin: 0 1.3rem;
-      padding: 0.2rem 0.7rem;
+      margin: 0 1.2rem;
+      padding: 0.3rem 0.9rem;
       border-radius: 30px;
       transition: background 0.2s;
-      font-size: 1.07rem;
+      font-size: 1.08rem;
     }
     nav a:hover, nav a.active {
       background: var(--secondary);
@@ -49,13 +49,13 @@
     }
     .container {
       max-width: 700px;
-      margin: 2rem auto;
-      padding: 0 1.5rem;
+      margin: 2.5rem auto 1.5rem auto;
+      padding: 0 1.4rem;
     }
     .blog-card {
       background: var(--card-bg);
       border-radius: 18px;
-      box-shadow: 0 6px 24px rgba(44,77,224,0.08);
+      box-shadow: 0 6px 24px rgba(44,77,224,0.09);
       padding: 2.5rem 2rem;
       margin: 2.2rem 0;
       transition: box-shadow 0.2s;
@@ -126,10 +126,10 @@
     <div class="blog-card">
       <h1><%= blog.title %></h1>
       <div class="meta">
-        <strong>By:</strong> <%= blog.author.first_name %> <%= blog.author.last_name %>
-        &nbsp; | &nbsp;
+        <strong>By:</strong> <%= blog.author ? blog.author.first_name + ' ' + blog.author.last_name : 'Unknown Author' %>
+        &nbsp;|&nbsp;
         <strong>Reads:</strong> <%= blog.read_count %>
-        &nbsp; | &nbsp;
+        &nbsp;|&nbsp;
         <strong>Reading time:</strong> <%= blog.reading_time %>
       </div>
       <div class="blog-body">

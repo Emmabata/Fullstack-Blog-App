@@ -151,9 +151,14 @@
 <body>
   <nav>
     <a href="/blogs/home">Blogs</a>
-    <a href="/blogs/create">Create Blog</a>
-    <a href="/blogs/drafts" class="active">My Drafts</a>
-    <a href="/logout">Logout</a>
+    <% if (session && session.userId) { %>
+      <a href="/blogs/create">Create Blog</a>
+      <a href="/blogs/drafts" class="active">My Drafts</a>
+      <a href="/logout">Logout</a>
+    <% } else { %>
+      <a href="/login">Login</a>
+      <a href="/signup">Sign Up</a>
+    <% } %>
   </nav>
   <div class="container">
     <h1>My Draft Blogs</h1>
@@ -164,6 +169,11 @@
         <% drafts.forEach(draft => { %>
           <div class="draft-card">
             <div class="draft-title"><%= draft.title %></div>
+            <% if (draft.description) { %>
+              <div style="color: var(--muted); margin-bottom: 0.35rem; font-size: 1rem;">
+                <%= draft.description %>
+              </div>
+            <% } %>
             <div class="draft-meta"><%= draft.reading_time %></div>
             <div class="draft-actions">
               <a href="/blogs/<%= draft._id %>/edit" class="edit-btn">Edit</a>

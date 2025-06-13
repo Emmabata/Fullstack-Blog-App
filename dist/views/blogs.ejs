@@ -159,13 +159,13 @@
           <div class="blog-card">
             <a class="blog-title" href="/blogs/home/<%= blog._id %>"><%= blog.title %></a>
             <div class="blog-meta">
-              By <%= blog.author.first_name %> <%= blog.author.last_name %>
+              <%= blog.author ? blog.author.first_name + ' ' + blog.author.last_name : 'Unknown Author' %>
               &nbsp;|&nbsp;
               <%= blog.reading_time %>
               &nbsp;|&nbsp;
               Reads: <%= blog.read_count %>
             </div>
-            <% if (session && session.userId && String(blog.author._id) === String(session.userId)) { %>
+            <% if (session && session.userId && blog.author && String(blog.author._id) === String(session.userId)) { %>
               <div class="blog-actions">
                 <a href="/blogs/<%= blog._id %>/edit" class="edit-btn">Edit</a>
                 <form action="/blogs/<%= blog._id %>/delete" method="POST" style="display:inline;">

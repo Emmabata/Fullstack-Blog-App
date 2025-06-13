@@ -1,15 +1,18 @@
-const Blog = require('../models/blogModel');
-const User = require('../models/userModel'); // Or userModels, match your file
+// controllers/blogController.js
 
+const Blog = require('../models/blogModel');
+const User = require('../models/userModel');
+
+// Calculate reading time: 200 words/minute, always at least 1 min
 function calculateReadingTime(text) {
-    const words = text.split(/\s+/).length;
-    const minutes = Math.ceil(words / 200);
+    const words = text ? text.split(/\s+/).length : 0;
+    const minutes = Math.max(1, Math.ceil(words / 200));
     return `${minutes} min read`;
 }
 
 // ===== EJS Controllers =====
 
-// Show edit form (GET)
+// Render form for editing a blog (GET)
 exports.showEditBlogEJS = async (req, res) => {
     const blog = await Blog.findById(req.params.id);
     if (!blog) return res.redirect('/blogs/home');
@@ -18,7 +21,7 @@ exports.showEditBlogEJS = async (req, res) => {
     res.render('editBlog', { blog, error: null });
 };
 
-// Handle edit (POST)
+// Handle blog edit submission (POST)
 exports.editBlogEJS = async (req, res) => {
     const { title, description, tags, body } = req.body;
     try {
@@ -40,7 +43,7 @@ exports.editBlogEJS = async (req, res) => {
     }
 };
 
-// Handle delete (POST)
+// Handle blog deletion (POST)
 exports.deleteBlogEJS = async (req, res) => {
     try {
         const blog = await Blog.findById(req.params.id);
@@ -53,22 +56,73 @@ exports.deleteBlogEJS = async (req, res) => {
     }
 };
 
-// For EJS form POST /blogs/create
+// Render blog creation form and handle submission (GET/POST handled in router)
 exports.createBlogEJS = async (req, res) => {
     const { title, description, tags, body } = req.body;
     try {
         await Blog.create({
             title,
             description,
-            tags: tags ? tags.split(',').map(t=>t.trim()) : [],
+            tags: tags ? tags.split(',').map(t => t.trim()) : [],
             author: req.user._id,
             state: 'draft',
             body,
             reading_time: calculateReadingTime(body),
         });
-        res.redirect('/blogs/home');
+        res.redirect('/blogs/drafts');
     } catch (err) {
         res.render('createBlog', { error: err.message });
+    }
+};
+
+// List all published blogs for EJS (with populated authors)
+exports.listPublishedBlogsEJS = async (req, res) => {
+    try {
+        const blogs = await Blog.find({ state: 'published' })
+            .populate('author')
+            .sort({ createdAt: -1 });
+        res.render('blogs', { blogs, session: req.session });
+    } catch (err) {
+        res.render('blogs', { blogs: [], session: req.session, error: 'Error loading blogs.' });
+    }
+};
+
+// Single blog for EJS (published only)
+exports.showSingleBlogEJS = async (req, res) => {
+    try {
+        const blog = await Blog.findById(req.params.id).populate('author');
+        if (!blog || blog.state !== 'published') return res.status(404).send('Blog not found');
+        blog.read_count++;
+        await blog.save();
+        res.render('blog', { blog, session: req.session });
+    } catch (err) {
+        res.status(500).send('Blog not found.');
+    }
+};
+
+// List draft blogs for logged-in user (EJS)
+exports.listDraftsEJS = async (req, res) => {
+    try {
+        const drafts = await Blog.find({ author: req.user._id, state: 'draft' })
+            .populate('author')
+            .sort({ createdAt: -1 });
+        res.render('drafts', { drafts, session: req.session });
+    } catch (err) {
+        res.render('drafts', { drafts: [], session: req.session, error: 'Error loading drafts.' });
+    }
+};
+
+// Publish a draft (EJS, POST)
+exports.publishDraftEJS = async (req, res) => {
+    try {
+        const blog = await Blog.findById(req.params.id);
+        if (!blog) return res.redirect('/blogs/drafts');
+        if (!blog.author.equals(req.user._id)) return res.status(403).send('Forbidden');
+        blog.state = 'published';
+        await blog.save();
+        res.redirect('/blogs/home');
+    } catch (err) {
+        res.redirect('/blogs/drafts');
     }
 };
 
@@ -81,7 +135,7 @@ exports.createBlog = async (req, res) => {
         const blog = await Blog.create({
             title,
             description,
-            tags: tags ? tags.split(',').map(t=>t.trim()) : [],
+            tags: tags ? tags.split(',').map(t => t.trim()) : [],
             author: req.user._id,
             state: 'draft',
             body,
@@ -99,11 +153,11 @@ exports.getPublishedBlogs = async (req, res) => {
     let query = { state: 'published' };
     if (author) query.author = author;
     if (title) query.title = new RegExp(title, 'i');
-    if (tags) query.tags = { $in: tags.split(',').map(t=>t.trim()) };
+    if (tags) query.tags = { $in: tags.split(',').map(t => t.trim()) };
 
     let sortOptions = {};
     if (sort) {
-        const allowed = ['read_count','reading_time','timestamp'];
+        const allowed = ['read_count', 'reading_time', 'timestamp'];
         sort.split(',').forEach(field => {
             const dir = field.startsWith('-') ? -1 : 1;
             const clean = field.replace(/^-/, '');
@@ -117,7 +171,7 @@ exports.getPublishedBlogs = async (req, res) => {
         const blogs = await Blog.find(query)
             .populate('author', 'first_name last_name email')
             .sort(sortOptions)
-            .skip((page-1)*limit)
+            .skip((page - 1) * limit)
             .limit(Number(limit));
         res.json(blogs);
     } catch (err) {
@@ -148,7 +202,7 @@ exports.getMyBlogs = async (req, res) => {
     try {
         const blogs = await Blog.find(query)
             .sort({ timestamp: -1 })
-            .skip((page-1)*limit)
+            .skip((page - 1) * limit)
             .limit(Number(limit));
         res.json(blogs);
     } catch (err) {

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Create Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Google Fonts -->
+  <!-- Google Fonts for style -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;500;400&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -12,15 +12,16 @@
       --secondary: #f6c44b;
       --bg: linear-gradient(135deg, #f0f6ff 0%, #e5e5fa 100%);
       --card-bg: #fff;
-      --error: #e53a3a;
+      --text: #23243a;
+      --muted: #6d6b7b;
     }
     html, body {
       margin: 0;
       padding: 0;
       font-family: 'Montserrat', Arial, sans-serif;
       background: var(--bg);
-      color: #23243a;
       min-height: 100vh;
+      color: var(--text);
     }
     nav {
       display: flex;
@@ -42,102 +43,108 @@
       transition: background 0.2s;
       font-size: 1.08rem;
     }
-    nav a:hover {
+    nav a:hover, nav a.active {
       background: var(--secondary);
       color: var(--primary);
     }
     .container {
-      max-width: 540px;
-      margin: 2.5rem auto 1.5rem auto;
-      padding: 0 1.3rem;
-    }
-    .card {
+      max-width: 650px;
+      margin: 2.5rem auto;
+      padding: 1.6rem 1.2rem 1.8rem 1.2rem;
       background: var(--card-bg);
       border-radius: 18px;
       box-shadow: 0 6px 24px rgba(44,77,224,0.09);
-      padding: 2.2rem 2.9rem 1.5rem 1.8rem;
-      margin-bottom: 1.5rem;
-      animation: fadein 1s;
-    }
-    @keyframes fadein {
-      from { opacity: 0; transform: translateY(30px);}
-      to   { opacity: 1; transform: translateY(0);}
     }
     h1 {
+      text-align: center;
       color: var(--primary);
-      margin-bottom: 1.3rem;
-      font-size: 1.7rem;
+      font-size: 2rem;
+      margin-bottom: 2.3rem;
       font-weight: 700;
       letter-spacing: -1px;
+    }
+    .error {
+      color: #d94629;
+      background: #fff0e0;
+      padding: 0.7rem 1.2rem;
+      border-radius: 10px;
+      margin-bottom: 1.2rem;
       text-align: center;
+      font-size: 1.05rem;
+      border: 1px solid #f2b094;
     }
-    label {
-      font-weight: 500;
-      color: #233;
-      margin-top: 0.6rem;
+    form label {
+      font-weight: 600;
+      color: var(--primary);
       display: block;
+      margin-bottom: 0.7rem;
     }
-    input[type="text"], textarea {
+    input[type="text"],
+    textarea {
       width: 100%;
+      padding: 0.7rem 0.8rem;
+      margin-bottom: 1.6rem;
+      border: 1.3px solid #c1d6fa;
+      border-radius: 6px;
       font-family: inherit;
-      font-size: 1.04rem;
-      margin-top: 0.2rem;
-      padding: 0.74rem;
-      border: 1.4px solid #c4d6f2;
-      border-radius: 9px;
-      background: #f8fafd;
-      margin-bottom: 1.1rem;
-      outline: none;
-      transition: border-color 0.2s;
+      font-size: 1.08rem;
+      color: var(--text);
+      background: #f5f8fe;
+      box-sizing: border-box;
+      transition: border 0.2s;
     }
-    input[type="text"]:focus, textarea:focus {
-      border-color: var(--primary);
-      background: #f3f8ff;
+    input[type="text"]:focus,
+    textarea:focus {
+      border: 1.5px solid var(--primary);
+      outline: none;
+      background: #fff;
     }
     textarea {
       resize: vertical;
       min-height: 110px;
+      max-height: 340px;
+      font-size: 1.05rem;
+      line-height: 1.55;
     }
-    .error {
-      color: var(--error);
-      margin-bottom: 1rem;
-      font-size: 1.06rem;
-      text-align: center;
-    }
-    .btn-primary {
+    button[type="submit"] {
+      display: block;
+      width: 100%;
       background: var(--primary);
       color: #fff;
       border: none;
-      border-radius: 20px;
-      padding: 0.8rem 2.1rem;
-      font-size: 1.08rem;
-      font-weight: 600;
+      border-radius: 25px;
+      padding: 0.85rem 0;
+      font-size: 1.13rem;
+      font-family: inherit;
+      font-weight: 700;
       cursor: pointer;
-      margin-top: 0.4rem;
-      box-shadow: 0 3px 12px rgba(44,77,224,0.09);
-      transition: background 0.15s, color 0.15s;
-      letter-spacing: 0.5px;
+      transition: background 0.2s, color 0.2s;
+      margin-top: 0.5rem;
+      box-shadow: 0 2px 8px rgba(44,77,224,0.09);
     }
-    .btn-primary:hover {
+    button[type="submit"]:hover {
       background: var(--secondary);
       color: var(--primary);
     }
     .back-link {
       display: block;
-      margin-top: 1.5rem;
       text-align: center;
+      margin-top: 1.6rem;
       color: var(--primary);
       font-weight: 500;
       text-decoration: none;
-      transition: color 0.2s;
+      font-size: 1.08rem;
+      transition: color 0.17s;
     }
     .back-link:hover {
       color: var(--secondary);
+      text-decoration: underline;
     }
     @media (max-width: 600px) {
-      .container { padding: 0 0.3rem; }
-      .card { padding: 1.2rem 0.5rem; }
+      .container { padding: 1rem 0.3rem; }
       h1 { font-size: 1.2rem; }
+      nav { font-size: 1rem; }
+      button[type="submit"] { font-size: 1rem; }
     }
   </style>
 </head>
@@ -145,7 +152,7 @@
   <nav>
     <a href="/blogs/home">Blogs</a>
     <% if (session && session.userId) { %>
-      <a href="/blogs/create">Create Blog</a>
+      <a href="/blogs/create" class="active">Create Blog</a>
       <a href="/blogs/drafts">My Drafts</a>
       <a href="/logout">Logout</a>
     <% } else { %>
@@ -154,27 +161,25 @@
     <% } %>
   </nav>
   <div class="container">
-    <div class="card">
-      <h1>Create New Blog</h1>
-      <% if (error) { %>
-        <div class="error"><%= error %></div>
-      <% } %>
-      <form action="/blogs/create" method="POST">
-        <label>Title:
-          <input type="text" name="title" required>
-        </label>
-        <label>Description:
-          <input type="text" name="description">
-        </label>
-        <label>Tags (comma separated):
-          <input type="text" name="tags">
-        </label>
-        <label>Body:
-          <textarea name="body" rows="8" required></textarea>
-        </label>
-        <button class="btn-primary" type="submit">Create Blog</button>
-      </form>
-    </div>
+    <h1>Create a New Blog Post</h1>
+    <% if (error) { %>
+      <div class="error"><%= error %></div>
+    <% } %>
+    <form action="/blogs/create" method="POST">
+      <label for="title">Title:</label>
+      <input type="text" id="title" name="title" required>
+
+      <label for="description">Description:</label>
+      <input type="text" id="description" name="description">
+
+      <label for="tags">Tags (comma separated):</label>
+      <input type="text" id="tags" name="tags" placeholder="e.g. tech, life, coding">
+
+      <label for="body">Body:</label>
+      <textarea id="body" name="body" rows="8" required></textarea>
+
+      <button type="submit">Create Blog</button>
+    </form>
     <a href="/blogs/home" class="back-link">← Back to Blogs</a>
   </div>
 </body>

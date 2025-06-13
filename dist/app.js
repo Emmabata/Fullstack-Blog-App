@@ -3,8 +3,6 @@ const express = require('express');
 const session = require('express-session'); // <-- ADD THIS
 const path = require('path');
 const app = express();
-const swaggerUi = require('swagger-ui-express');
-const YAML = require('yamljs');
 const connectDB = require('./config/db');
 const PORT = process.env.PORT || 3000;
 
@@ -36,9 +34,6 @@ const authRoutes = require('./routes/auth');
 const blogRoutes = require('./routes/blog');
 app.use('/', authRoutes);
 app.use('/blogs', blogRoutes);
-
-const swaggerDocument = YAML.load('./swagger.yaml');
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // ======= Home or Error Routes ======= //
 app.get('/', (req, res) => res.redirect('/blogs/home'));
